@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Clientes.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Clientes.Application.Dtos
 {
@@ -6,18 +7,21 @@ namespace Clientes.Application.Dtos
     {
         public Guid Id { get; set; }
 
-        public string NomeCompleto { get; set; }
+        public string Nome { get; set; }
 
         public string Email { get; set; }
 
-        public IEnumerable<string> Telefones { get; set; }
+        public string[] Telefones { get; set; }
 
-        public ClienteDTO(Guid id, string nomeCompleto, string email, IEnumerable<string> telefones)
+        public ClienteDTO(Guid id, string nome, string email, string[] telefones)
         {
             Id = id;
-            NomeCompleto = nomeCompleto;
+            Nome = nome;
             Email = email;
             Telefones = telefones;
         }
+
+        public static implicit operator ClienteDTO(Cliente cliente) =>
+            new ClienteDTO(cliente.Id, cliente.Nome, cliente.Email, cliente.Telefones);
     }
 }

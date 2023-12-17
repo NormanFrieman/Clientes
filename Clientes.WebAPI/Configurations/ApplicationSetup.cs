@@ -1,4 +1,5 @@
-﻿using Clientes.Application.Services;
+﻿using Clientes.Application.Interfaces;
+using Clientes.Application.Services;
 
 namespace Clientes.WebAPI.Configurations
 {

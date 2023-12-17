@@ -1,5 +1,5 @@
 ﻿using Clientes.Application.Dtos;
-using Clientes.Application.Services;
+using Clientes.Application.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,25 +25,25 @@ namespace Clientes.WebAPI.Controllers
             if (!validation.IsValid)
                 return BadRequest(validation.Errors);
 
-            return Ok(_service.CreateCliente(cliente));
+            return Ok(await _service.CreateCliente(cliente));
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] string? telefone = null)
+        public async Task<IActionResult> Get([FromQuery] string? telefone = null)
         {
-            return Ok(_service.GetClientes(telefone));
+            return Ok(await _service.GetClientes(telefone));
         }
 
         [HttpPatch("{clienteId}")]
-        public IActionResult Patch([FromRoute] Guid clienteId, [FromBody] ClienteDTO clienteAtualizado)
+        public async Task<IActionResult> Patch([FromRoute] Guid clienteId, [FromBody] ClienteDTO clienteAtualizado)
         {
-            return Ok(_service.UpdateCliente(clienteId, clienteAtualizado));
+            return Ok(await _service.UpdateCliente(clienteId, clienteAtualizado));
         }
 
         [HttpDelete("{clienteId}")]
-        public IActionResult Delete([FromRoute] Guid clienteId)
+        public async Task<IActionResult> Delete([FromRoute] Guid clienteId)
         {
-            _service.DeleteCliente(clienteId);
+            await _service.DeleteCliente(clienteId);
             return Ok();
         }
     }

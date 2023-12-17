@@ -1,40 +1,39 @@
 ﻿using Clientes.Application.Dtos;
+using Clientes.Application.Interfaces;
+using Clientes.Domain.Entities;
+using Clientes.Domain.Interfaces;
 
 namespace Clientes.Application.Services
 {
     public class ClienteService : IClienteService
     {
-        public static List<ClienteDTO> Clientes = new List<ClienteDTO>();
+        private readonly IClienteRepository _repository;
 
-        public ClienteDTO CreateCliente(ClienteDTO cliente)
+        public ClienteService(IClienteRepository repository)
         {
-            cliente.Id = Guid.NewGuid();
-            Clientes.Add(cliente);
-
-            return cliente;
+            _repository = repository;
         }
 
-        public void DeleteCliente(Guid clienteId)
+        public async Task<ClienteDTO> CreateCliente(ClienteDTO cliente)
         {
-            Clientes.Remove(Clientes.First(x => x.Id == clienteId));
+            return await _repository.CreateCliente(new Cliente(cliente.Nome, cliente.Email, cliente.Telefones));
         }
 
-        public IEnumerable<ClienteDTO> GetClientes(string? telefone = null)
+        public async Task DeleteCliente(Guid clienteId)
         {
-            return Clientes.Where(x => telefone == null || x.Telefones.Contains(telefone));
+            await _repository.DeleteCliente(clienteId);
         }
 
-        public ClienteDTO UpdateCliente(Guid clienteId, ClienteDTO clienteAtualizado)
+        public async Task<IEnumerable<ClienteDTO>> GetClientes(string? telefone = null)
         {
-            var cliente = Clientes.First(x => x.Id == clienteId);
+            return (await _repository.GetClientesAsync(telefone))
+                .Select(x => new ClienteDTO(x.Id, x.Nome, x.Email, x.Telefones))
+                .ToArray();
+        }
 
-            cliente.NomeCompleto = clienteAtualizado.NomeCompleto ?? cliente.NomeCompleto;
-            cliente.Email = clienteAtualizado.Email ?? cliente.Email;
-            cliente.Telefones = clienteAtualizado.Telefones ?? cliente.Telefones;
-
-            Clientes.Add(cliente);
-
-            return cliente;
+        public async Task<ClienteDTO> UpdateCliente(Guid clienteId, ClienteDTO clienteAtualizado)
+        {
+            return await _repository.UpdateCliente(clienteId, new Cliente(clienteAtualizado.Nome, clienteAtualizado.Email, clienteAtualizado.Telefones));
         }
     }
 }

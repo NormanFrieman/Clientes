@@ -7,7 +7,7 @@ namespace Clientes.Application.Validators
     {
         public ClienteValidator()
         {
-            RuleFor(cliente => cliente.NomeCompleto)
+            RuleFor(cliente => cliente.Nome)
                 .NotEmpty();
 
             RuleFor(cliente => cliente.Email)
