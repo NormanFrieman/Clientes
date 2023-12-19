@@ -4,9 +4,9 @@ namespace Clientes.Application.Interfaces
 {
     public interface IClienteService
     {
-        Task<IEnumerable<ClienteDTO>> GetClientes(string? telefone = null);
-        Task<ClienteDTO> CreateCliente(ClienteDTO cliente);
-        Task<ClienteDTO> UpdateCliente(Guid clienteId, ClienteDTO clienteAtualizado);
-        Task DeleteCliente(Guid clienteId);
+        Task<IEnumerable<ClienteDto>> GetClientes(string? numero = null);
+        Task<ClienteDto> CreateCliente(ClienteDto cliente);
+        Task<ClienteDto> UpdateCliente(Guid clienteId, ClienteDto clienteAtualizado);
+        Task DeleteCliente(string email);
     }
 }

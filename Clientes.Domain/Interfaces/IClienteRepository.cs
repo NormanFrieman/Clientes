@@ -4,9 +4,9 @@ namespace Clientes.Domain.Interfaces
 {
     public interface IClienteRepository
     {
-        Task<IEnumerable<Cliente>> GetClientesAsync(string? telefone = null);
+        Task<IEnumerable<Cliente>> GetClientesAsync(string? numero = null);
         Task<Cliente> CreateCliente(Cliente cliente);
         Task<Cliente> UpdateCliente(Guid clienteId, Cliente clienteAtualizado);
-        Task DeleteCliente(Guid clienteId);
+        Task DeleteCliente(string email);
     }
 }

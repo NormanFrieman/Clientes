@@ -1,9 +1,8 @@
 ﻿using Clientes.Domain.Entities;
-using System.ComponentModel.DataAnnotations;
 
 namespace Clientes.Application.Dtos
 {
-    public class ClienteDTO
+    public class ClienteDto
     {
         public Guid Id { get; set; }
 
@@ -11,9 +10,11 @@ namespace Clientes.Application.Dtos
 
         public string Email { get; set; }
 
-        public string[] Telefones { get; set; }
+        public IEnumerable<TelefoneDto> Telefones { get; set; }
 
-        public ClienteDTO(Guid id, string nome, string email, string[] telefones)
+        public ClienteDto() : this(Guid.Empty, string.Empty, string.Empty, Enumerable.Empty<TelefoneDto>()) { }
+
+        public ClienteDto(Guid id, string nome, string email, IEnumerable<TelefoneDto> telefones)
         {
             Id = id;
             Nome = nome;
@@ -21,7 +22,12 @@ namespace Clientes.Application.Dtos
             Telefones = telefones;
         }
 
-        public static implicit operator ClienteDTO(Cliente cliente) =>
-            new ClienteDTO(cliente.Id, cliente.Nome, cliente.Email, cliente.Telefones);
+        public ClienteDto(Cliente cliente)
+        {
+            Id = cliente.Id;
+            Nome = cliente.Nome;
+            Email = cliente.Email;
+            Telefones = cliente.Telefones.Select(x => new TelefoneDto(x)).ToArray();
+        }
     }
 }

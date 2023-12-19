@@ -1,6 +1,7 @@
 ﻿using Clientes.Application.Dtos;
 using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
+using Clientes.Domain.Enums;
 using Clientes.Domain.Interfaces;
 
 namespace Clientes.Application.Services
@@ -14,26 +15,41 @@ namespace Clientes.Application.Services
             _repository = repository;
         }
 
-        public async Task<ClienteDTO> CreateCliente(ClienteDTO cliente)
+        public async Task<ClienteDto> CreateCliente(ClienteDto cliente)
         {
-            return await _repository.CreateCliente(new Cliente(cliente.Nome, cliente.Email, cliente.Telefones));
+            var novoCliente = await _repository.CreateCliente(new Cliente(cliente.Nome, cliente.Email, cliente.Telefones
+                .Select(x => new Telefone(x.Numero, TelefoneTipo.FIXO.Equals(x.Tipo) ? ETelefoneTipo.Fixo : ETelefoneTipo.Celular))
+                .ToArray()));
+
+            return new ClienteDto(novoCliente);
         }
 
-        public async Task DeleteCliente(Guid clienteId)
+        public async Task DeleteCliente(string email)
         {
-            await _repository.DeleteCliente(clienteId);
+            await _repository.DeleteCliente(email);
         }
 
-        public async Task<IEnumerable<ClienteDTO>> GetClientes(string? telefone = null)
+        public async Task<IEnumerable<ClienteDto>> GetClientes(string? numero = null)
         {
-            return (await _repository.GetClientesAsync(telefone))
-                .Select(x => new ClienteDTO(x.Id, x.Nome, x.Email, x.Telefones))
+            return (await _repository.GetClientesAsync(numero))
+                .Select(x => new ClienteDto(x.Id, x.Nome, x.Email, x.Telefones
+                    .Select(y => new TelefoneDto(y))
+                    .ToArray()))
                 .ToArray();
         }
 
-        public async Task<ClienteDTO> UpdateCliente(Guid clienteId, ClienteDTO clienteAtualizado)
+        public async Task<ClienteDto> UpdateCliente(Guid clienteId, ClienteDto clienteAtualizado)
         {
-            return await _repository.UpdateCliente(clienteId, new Cliente(clienteAtualizado.Nome, clienteAtualizado.Email, clienteAtualizado.Telefones));
+            var cliente = await _repository.UpdateCliente(clienteId, new Cliente(
+                clienteAtualizado.Nome,
+                clienteAtualizado.Email,
+                clienteAtualizado.Telefones
+                    .Select(x => new Telefone(x.Numero, TelefoneTipo.FIXO.Equals(x.Tipo) ? ETelefoneTipo.Fixo : ETelefoneTipo.Celular))
+                    .ToArray()
+                )
+            );
+
+            return new ClienteDto(cliente);
         }
     }
 }

@@ -5,11 +5,12 @@
         public Guid Id { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
-        public string[] Telefones { get; set; }
 
-        public Cliente() : this(string.Empty, string.Empty, Array.Empty<string>()) { }
+        public IEnumerable<Telefone> Telefones { get; set; }
 
-        public Cliente(string nome, string email, string[] telefones)
+        public Cliente() : this(string.Empty, string.Empty, new List<Telefone>()) { }
+
+        public Cliente(string nome, string email, IEnumerable<Telefone> telefones)
         {
             Nome = nome;
             Email = email;

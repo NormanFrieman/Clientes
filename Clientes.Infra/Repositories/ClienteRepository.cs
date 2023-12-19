@@ -22,17 +22,20 @@ namespace Clientes.Infra.Repositories
             return cliente;
         }
 
-        public async Task DeleteCliente(Guid clienteId)
+        public async Task DeleteCliente(string email)
         {
-            var cliente = await _appDbContext.Cliente.FindAsync(clienteId)
-                ?? throw new ArgumentException("Cliente não encontrado", nameof(clienteId));
+            var cliente = await _appDbContext.Cliente.SingleOrDefaultAsync(x => x.Email.Equals(email))
+                ?? throw new ArgumentException("Cliente não encontrado", nameof(email));
             _appDbContext.Cliente.Remove(cliente);
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Cliente>> GetClientesAsync(string? telefone = null)
+        public async Task<IEnumerable<Cliente>> GetClientesAsync(string? numero = null)
         {
-            var clientes = await _appDbContext.Cliente.Where(x => telefone == null || x.Telefones.Contains(telefone)).ToArrayAsync();
+            var clientes = await _appDbContext.Cliente
+                .Include(x => x.Telefones)
+                .Where(x => numero == null || x.Telefones.Any(tel => tel.Numero.Equals(numero)))
+                .ToArrayAsync();
 
             return clientes;
         }
@@ -42,9 +45,7 @@ namespace Clientes.Infra.Repositories
             var cliente = await _appDbContext.Cliente.FindAsync(clienteId)
                 ?? throw new ArgumentException("Cliente não encontrado", nameof(clienteId));
 
-            cliente.Nome = clienteAtualizado.Nome ?? cliente.Nome;
             cliente.Email = clienteAtualizado.Email ?? cliente.Email;
-            cliente.Telefones = clienteAtualizado.Telefones ?? cliente.Telefones;
 
             _appDbContext.Cliente.Update(cliente);
             await _appDbContext.SaveChangesAsync();

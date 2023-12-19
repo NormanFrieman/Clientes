@@ -1,4 +1,5 @@
-﻿using Clientes.Domain.Interfaces;
+﻿using Clientes.Domain.Entities;
+using Clientes.Domain.Interfaces;
 using Clientes.Infra.Core;
 using Clientes.Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace Clientes.Infra.Configuration
         {
             services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(connection));
             services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<ITelefoneRepository, TelefoneRepository>();
 
             return services;
         }

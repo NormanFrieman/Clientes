@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Clientes.Application.Validators
 {
-    public class ClienteValidator : AbstractValidator<ClienteDTO>
+    public class ClienteValidator : AbstractValidator<ClienteDto>
     {
         public ClienteValidator()
         {

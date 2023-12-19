@@ -9,41 +9,41 @@ namespace Clientes.WebAPI.Controllers
     [ApiController]
     public class ClienteController : Controller
     {
-        private readonly IValidator<ClienteDTO> _validator;
-        private readonly IClienteService _service;
+        private readonly IValidator<ClienteDto> _validator;
+        private readonly IClienteService _clienteService;
 
-        public ClienteController(IValidator<ClienteDTO> validator, IClienteService clienteService)
+        public ClienteController(IValidator<ClienteDto> validator, IClienteService clienteService)
         {
             _validator = validator;
-            _service = clienteService;
+            _clienteService = clienteService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ClienteDTO cliente)
+        public async Task<IActionResult> Create([FromBody] ClienteDto cliente)
         {
             var validation = await _validator.ValidateAsync(cliente);
             if (!validation.IsValid)
                 return BadRequest(validation.Errors);
 
-            return Ok(await _service.CreateCliente(cliente));
+            return Ok(await _clienteService.CreateCliente(cliente));
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string? telefone = null)
+        public async Task<IActionResult> Read([FromQuery] string? numero = null)
         {
-            return Ok(await _service.GetClientes(telefone));
+            return Ok(await _clienteService.GetClientes(numero));
         }
 
-        [HttpPatch("{clienteId}")]
-        public async Task<IActionResult> Patch([FromRoute] Guid clienteId, [FromBody] ClienteDTO clienteAtualizado)
+        [HttpPut("{clienteId}")]
+        public async Task<IActionResult> Update([FromRoute] Guid clienteId, [FromBody] ClienteDto clienteAtualizado)
         {
-            return Ok(await _service.UpdateCliente(clienteId, clienteAtualizado));
+            return Ok(await _clienteService.UpdateCliente(clienteId, clienteAtualizado));
         }
 
-        [HttpDelete("{clienteId}")]
-        public async Task<IActionResult> Delete([FromRoute] Guid clienteId)
+        [HttpDelete("{email}")]
+        public async Task<IActionResult> Delete([FromRoute] string email)
         {
-            await _service.DeleteCliente(clienteId);
+            await _clienteService.DeleteCliente(email);
             return Ok();
         }
     }

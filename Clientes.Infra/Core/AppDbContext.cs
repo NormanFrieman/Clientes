@@ -7,5 +7,17 @@ namespace Clientes.Infra.Core
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Cliente> Cliente { get; set; }
+        public DbSet<Telefone> Telefone { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Cliente>()
+                .HasIndex(x => x.Email).IsUnique();
+
+            modelBuilder.Entity<Telefone>()
+                .HasIndex(x => x.Numero).IsUnique();
+        }
     }
 }
