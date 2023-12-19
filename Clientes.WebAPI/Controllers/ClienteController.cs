@@ -35,9 +35,9 @@ namespace Clientes.WebAPI.Controllers
         }
 
         [HttpPut("{clienteId}")]
-        public async Task<IActionResult> Update([FromRoute] Guid clienteId, [FromBody] ClienteDto clienteAtualizado)
+        public async Task<IActionResult> Update([FromRoute] Guid clienteId, [FromBody] string email)
         {
-            return Ok(await _clienteService.UpdateCliente(clienteId, clienteAtualizado));
+            return Ok(await _clienteService.UpdateCliente(clienteId, email));
         }
 
         [HttpDelete("{email}")]

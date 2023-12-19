@@ -6,7 +6,7 @@ namespace Clientes.Application.Interfaces
     {
         Task<IEnumerable<ClienteDto>> GetClientes(string? numero = null);
         Task<ClienteDto> CreateCliente(ClienteDto cliente);
-        Task<ClienteDto> UpdateCliente(Guid clienteId, ClienteDto clienteAtualizado);
+        Task<ClienteDto> UpdateCliente(Guid clienteId, string email);
         Task DeleteCliente(string email);
     }
 }

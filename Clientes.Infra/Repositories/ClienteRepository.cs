@@ -40,12 +40,12 @@ namespace Clientes.Infra.Repositories
             return clientes;
         }
 
-        public async Task<Cliente> UpdateCliente(Guid clienteId, Cliente clienteAtualizado)
+        public async Task<Cliente> UpdateCliente(Guid clienteId, string email)
         {
             var cliente = await _appDbContext.Cliente.FindAsync(clienteId)
                 ?? throw new ArgumentException("Cliente não encontrado", nameof(clienteId));
 
-            cliente.Email = clienteAtualizado.Email ?? cliente.Email;
+            cliente.Email = email;
 
             _appDbContext.Cliente.Update(cliente);
             await _appDbContext.SaveChangesAsync();

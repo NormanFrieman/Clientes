@@ -38,16 +38,9 @@ namespace Clientes.Application.Services
                 .ToArray();
         }
 
-        public async Task<ClienteDto> UpdateCliente(Guid clienteId, ClienteDto clienteAtualizado)
+        public async Task<ClienteDto> UpdateCliente(Guid clienteId, string email)
         {
-            var cliente = await _repository.UpdateCliente(clienteId, new Cliente(
-                clienteAtualizado.Nome,
-                clienteAtualizado.Email,
-                clienteAtualizado.Telefones
-                    .Select(x => new Telefone(x.Numero, TelefoneTipo.FIXO.Equals(x.Tipo) ? ETelefoneTipo.Fixo : ETelefoneTipo.Celular))
-                    .ToArray()
-                )
-            );
+            var cliente = await _repository.UpdateCliente(clienteId, email);
 
             return new ClienteDto(cliente);
         }

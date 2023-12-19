@@ -6,7 +6,7 @@ namespace Clientes.Domain.Interfaces
     {
         Task<IEnumerable<Cliente>> GetClientesAsync(string? numero = null);
         Task<Cliente> CreateCliente(Cliente cliente);
-        Task<Cliente> UpdateCliente(Guid clienteId, Cliente clienteAtualizado);
+        Task<Cliente> UpdateCliente(Guid clienteId, string email);
         Task DeleteCliente(string email);
     }
 }
