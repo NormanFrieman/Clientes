@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B5A778F8-7C3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{BFA546DB-C2A1-4BDE-8E36-B53FAA664195}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clientes.WebAPI", "Clientes.WebAPI\Clientes.WebAPI.csproj", "{CD75319D-A6B4-4E73-ACFF-61A68FB9C858}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clientes.WebAPI", "Clientes.WebAPI\Clientes.WebAPI.csproj", "{CD75319D-A6B4-4E73-ACFF-61A68FB9C858}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{6334FBAA-0F0A-4C75-8F41-E5215ABAA2FA}"
 EndProject
@@ -17,11 +17,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infra", "Infra", "{ACDA3D35
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7F5AF8BD-57A4-484A-85AA-1F8ED7BC3DF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clientes.Infra", "Clientes.Infra\Clientes.Infra.csproj", "{4C8A9AF0-7CBD-4391-8B57-42EAE88C3394}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clientes.Infra", "Clientes.Infra\Clientes.Infra.csproj", "{4C8A9AF0-7CBD-4391-8B57-42EAE88C3394}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clientes.Domain", "Clientes.Domain\Clientes.Domain.csproj", "{17D6A30B-CB79-47AC-8E2A-B79B659FAD38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clientes.Domain", "Clientes.Domain\Clientes.Domain.csproj", "{17D6A30B-CB79-47AC-8E2A-B79B659FAD38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clientes.Application", "Clientes.Application\Clientes.Application.csproj", "{83310960-CFD8-4468-9993-422A23CAE765}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clientes.Application", "Clientes.Application\Clientes.Application.csproj", "{83310960-CFD8-4468-9993-422A23CAE765}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{167FB261-A52C-4BB0-8274-3C425F8A0DDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{83310960-CFD8-4468-9993-422A23CAE765}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83310960-CFD8-4468-9993-422A23CAE765}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83310960-CFD8-4468-9993-422A23CAE765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167FB261-A52C-4BB0-8274-3C425F8A0DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167FB261-A52C-4BB0-8274-3C425F8A0DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167FB261-A52C-4BB0-8274-3C425F8A0DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167FB261-A52C-4BB0-8274-3C425F8A0DDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{4C8A9AF0-7CBD-4391-8B57-42EAE88C3394} = {ACDA3D35-2D58-4C91-AFDD-292A1FB6A8F7}
 		{17D6A30B-CB79-47AC-8E2A-B79B659FAD38} = {16BED912-18E9-4E5F-B10E-1F6ABFE78D0A}
 		{83310960-CFD8-4468-9993-422A23CAE765} = {6334FBAA-0F0A-4C75-8F41-E5215ABAA2FA}
+		{167FB261-A52C-4BB0-8274-3C425F8A0DDB} = {7F5AF8BD-57A4-484A-85AA-1F8ED7BC3DF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {582888F0-6DDC-4789-A302-40AEDEE78993}

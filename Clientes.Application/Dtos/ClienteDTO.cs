@@ -22,6 +22,13 @@ namespace Clientes.Application.Dtos
             Telefones = telefones;
         }
 
+        public ClienteDto(string nome, string email, IEnumerable<TelefoneDto> telefones)
+        {
+            Nome = nome;
+            Email = email;
+            Telefones = telefones;
+        }
+
         public ClienteDto(Cliente cliente)
         {
             Id = cliente.Id;

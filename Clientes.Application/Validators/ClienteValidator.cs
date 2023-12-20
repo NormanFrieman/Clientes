@@ -12,6 +12,7 @@ namespace Clientes.Application.Validators
                 .WithMessage("É necessário informar o nome do cliente");
 
             RuleFor(cliente => cliente.Email)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage("É necessário informar o email do cliente")
                 .EmailAddress()
