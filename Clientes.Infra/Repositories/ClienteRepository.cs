@@ -52,5 +52,11 @@ namespace Clientes.Infra.Repositories
 
             return cliente;
         }
+
+        public async Task<bool> EmailAlreadyUsed(string email) =>
+            await _appDbContext.Cliente.AnyAsync(x => x.Email.Equals(email));
+
+        public async Task<bool> UserExists(Guid clienteId) =>
+            await _appDbContext.Cliente.AnyAsync(x => x.Id == clienteId);
     }
 }

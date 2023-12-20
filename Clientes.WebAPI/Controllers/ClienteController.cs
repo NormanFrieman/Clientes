@@ -9,23 +9,21 @@ namespace Clientes.WebAPI.Controllers
     [ApiController]
     public class ClienteController : Controller
     {
-        private readonly IValidator<ClienteDto> _validator;
         private readonly IClienteService _clienteService;
 
-        public ClienteController(IValidator<ClienteDto> validator, IClienteService clienteService)
+        public ClienteController(IClienteService clienteService)
         {
-            _validator = validator;
             _clienteService = clienteService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ClienteDto cliente)
         {
-            var validation = await _validator.ValidateAsync(cliente);
-            if (!validation.IsValid)
-                return BadRequest(validation.Errors);
+            var result = await _clienteService.CreateCliente(cliente);
+            if (!result.IsSuccess)
+                return StatusCode((int)result.Error.Code, result.Error.Messages);
 
-            return Ok(await _clienteService.CreateCliente(cliente));
+            return Ok(result.Body);
         }
 
         [HttpGet]
@@ -37,14 +35,21 @@ namespace Clientes.WebAPI.Controllers
         [HttpPut("{clienteId}")]
         public async Task<IActionResult> Update([FromRoute] Guid clienteId, [FromBody] string email)
         {
-            return Ok(await _clienteService.UpdateCliente(clienteId, email));
+            var result = await _clienteService.UpdateCliente(clienteId, email);
+            if (!result.IsSuccess)
+                return StatusCode((int)result.Error.Code, result.Error.Messages);
+
+            return NoContent();
         }
 
         [HttpDelete("{email}")]
         public async Task<IActionResult> Delete([FromRoute] string email)
         {
-            await _clienteService.DeleteCliente(email);
-            return Ok();
+            var result = await _clienteService.DeleteCliente(email);
+            if (!result.IsSuccess)
+                return StatusCode((int)result.Error.Code, result.Error.Messages);
+
+            return NoContent();
         }
     }
 }

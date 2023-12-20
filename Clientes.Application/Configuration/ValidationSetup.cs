@@ -1,5 +1,6 @@
 ﻿using Clientes.Application.Validators;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Clientes.WebAPI.Configurations
 {

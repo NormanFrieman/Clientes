@@ -8,5 +8,7 @@ namespace Clientes.Domain.Interfaces
         Task<Cliente> CreateCliente(Cliente cliente);
         Task<Cliente> UpdateCliente(Guid clienteId, string email);
         Task DeleteCliente(string email);
+        Task<bool> EmailAlreadyUsed(string email);
+        Task<bool> UserExists(Guid clienteId);
     }
 }

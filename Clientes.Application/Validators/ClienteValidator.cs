@@ -8,14 +8,18 @@ namespace Clientes.Application.Validators
         public ClienteValidator()
         {
             RuleFor(cliente => cliente.Nome)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("É necessário informar o nome do cliente");
 
             RuleFor(cliente => cliente.Email)
                 .NotEmpty()
-                .EmailAddress();
+                .WithMessage("É necessário informar o email do cliente")
+                .EmailAddress()
+                .WithMessage("Email informado não está em um formato válido");
 
             RuleFor(cliente => cliente.Telefones)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage("É necessário informar pelo menos um telefone");
         }
     }
 }

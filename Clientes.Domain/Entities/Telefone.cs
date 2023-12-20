@@ -15,6 +15,8 @@ namespace Clientes.Domain.Entities
 
         public Telefone(string numero, ETelefoneTipo tipo) : this(numero, tipo, null!) { }
 
+        public Telefone(string numero, string tipo) : this(numero, TelefoneTipo.FIXO.Equals(tipo) ? ETelefoneTipo.Fixo : ETelefoneTipo.Celular) { }
+
         public Telefone(string numero, ETelefoneTipo tipo, Cliente cliente)
         {
             Numero = numero;

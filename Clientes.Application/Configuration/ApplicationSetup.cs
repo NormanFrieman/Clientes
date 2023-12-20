@@ -1,5 +1,6 @@
 ﻿using Clientes.Application.Interfaces;
 using Clientes.Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Clientes.WebAPI.Configurations
 {

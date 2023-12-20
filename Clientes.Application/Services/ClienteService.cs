@@ -1,32 +1,47 @@
-﻿using Clientes.Application.Dtos;
+﻿using Clientes.Application.Abstractions;
+using Clientes.Application.Abstractions.ErrorsMessage;
+using Clientes.Application.Dtos;
 using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
-using Clientes.Domain.Enums;
 using Clientes.Domain.Interfaces;
+using FluentValidation;
 
 namespace Clientes.Application.Services
 {
     public class ClienteService : IClienteService
     {
+        private readonly IValidator<ClienteDto> _validator;
         private readonly IClienteRepository _repository;
 
-        public ClienteService(IClienteRepository repository)
+        public ClienteService(IValidator<ClienteDto> validator, IClienteRepository repository)
         {
+            _validator = validator;
             _repository = repository;
         }
 
-        public async Task<ClienteDto> CreateCliente(ClienteDto cliente)
+        public async Task<Result> CreateCliente(ClienteDto cliente)
         {
+            var validation = await _validator.ValidateAsync(cliente);
+            if (!validation.IsValid)
+                return Result.Failure(validation.Errors);
+
+            if (await _repository.EmailAlreadyUsed(cliente.Email))
+                return ClienteErrors.EmailAlreadyUsed;
+
             var novoCliente = await _repository.CreateCliente(new Cliente(cliente.Nome, cliente.Email, cliente.Telefones
-                .Select(x => new Telefone(x.Numero, TelefoneTipo.FIXO.Equals(x.Tipo) ? ETelefoneTipo.Fixo : ETelefoneTipo.Celular))
+                .Select(x => new Telefone(x.Numero, x.Tipo))
                 .ToArray()));
 
-            return new ClienteDto(novoCliente);
+            return Result.Success(new ClienteDto(novoCliente));
         }
 
-        public async Task DeleteCliente(string email)
+        public async Task<Result> DeleteCliente(string email)
         {
+            if (!(await _repository.EmailAlreadyUsed(email)))
+                return ClienteErrors.EmailNotFound;
+
             await _repository.DeleteCliente(email);
+            return Result.Success();
         }
 
         public async Task<IEnumerable<ClienteDto>> GetClientes(string? numero = null)
@@ -38,11 +53,16 @@ namespace Clientes.Application.Services
                 .ToArray();
         }
 
-        public async Task<ClienteDto> UpdateCliente(Guid clienteId, string email)
+        public async Task<Result> UpdateCliente(Guid clienteId, string email)
         {
-            var cliente = await _repository.UpdateCliente(clienteId, email);
+            if (!(await _repository.UserExists(clienteId)))
+                return ClienteErrors.UserNotFound;
 
-            return new ClienteDto(cliente);
+            if (await _repository.EmailAlreadyUsed(email))
+                return ClienteErrors.EmailAlreadyUsed;
+
+            var cliente = await _repository.UpdateCliente(clienteId, email);
+            return Result.Success(new ClienteDto(cliente));
         }
     }
 }
