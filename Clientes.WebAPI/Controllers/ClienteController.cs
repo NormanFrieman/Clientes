@@ -1,6 +1,5 @@
 ﻿using Clientes.Application.Dtos;
 using Clientes.Application.Interfaces;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Clientes.WebAPI.Controllers
@@ -27,9 +26,15 @@ namespace Clientes.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Read([FromQuery] string? numero = null)
+        public async Task<IActionResult> Read()
         {
-            return Ok(await _clienteService.GetClientes(numero));
+            return Ok(await _clienteService.GetClientes());
+        }
+
+        [HttpGet("{ddd}/{numero}")]
+        public async Task<IActionResult> ReadByPhone([FromRoute] string ddd, string numero)
+        {
+            return Ok(await _clienteService.GetClientes(ddd + numero));
         }
 
         [HttpPut("{clienteId}")]

@@ -14,18 +14,24 @@ namespace Clientes.Infra.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<Telefone> UpdateTelefone(Guid clienteId, string numero, Telefone telefoneAtualizado)
+        public async Task UpdateTelefone(Guid clienteId, string ddd, string numero, Telefone telefoneAtualizado)
         {
-            var telefone = await _appDbContext.Telefone.SingleOrDefaultAsync(x => x.ClienteId == clienteId && x.Numero.Equals(numero))
-                ?? throw new ArgumentException("Telefone não encontrado", nameof(numero));
+            var telefone = await _appDbContext.Telefone.SingleAsync(x => x.ClienteId == clienteId && x.Ddd.Equals(ddd) && x.Numero.Equals(numero));
 
             telefone.Tipo = telefoneAtualizado.Tipo;
             telefone.Numero = telefoneAtualizado.Numero;
 
             _appDbContext.Telefone.Update(telefone);
             await _appDbContext.SaveChangesAsync();
-
-            return telefone;
         }
+
+        public async Task<bool> PhoneAlreadUsed(string ddd, string numero) =>
+            await _appDbContext.Telefone.AnyAsync(x => x.Ddd.Equals(ddd) && x.Numero.Equals(numero));
+
+        public async Task<IEnumerable<string>> PhonesAlreadUsed(IEnumerable<string> dddNumeros) => 
+            await _appDbContext.Telefone.Where(x => dddNumeros.Contains(string.Concat(x.Ddd, x.Numero))).Select(x => $"({x.Ddd}) {x.Numero}").ToArrayAsync();
+
+        public async Task<bool> PhoneBelong(Guid clienteId, string ddd, string numero) =>
+            await _appDbContext.Telefone.AnyAsync(x => x.ClienteId == clienteId && x.Ddd.Equals(ddd) && x.Numero.Equals(numero));
     }
 }

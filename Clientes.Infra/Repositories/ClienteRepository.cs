@@ -30,11 +30,11 @@ namespace Clientes.Infra.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Cliente>> GetClientesAsync(string? numero = null)
+        public async Task<IEnumerable<Cliente>> GetClientesAsync(string? dddNumero = null)
         {
             var clientes = await _appDbContext.Cliente
                 .Include(x => x.Telefones)
-                .Where(x => numero == null || x.Telefones.Any(tel => tel.Numero.Equals(numero)))
+                .Where(x => dddNumero == null || x.Telefones.Any(tel => (tel.Ddd + tel.Numero).Equals(dddNumero)))
                 .ToArrayAsync();
 
             return clientes;

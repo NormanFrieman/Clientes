@@ -4,6 +4,9 @@ namespace Clientes.Domain.Interfaces
 {
     public interface ITelefoneRepository
     {
-        Task<Telefone> UpdateTelefone(Guid clienteId, string numero, Telefone telefoneAtualizado);
+        Task UpdateTelefone(Guid clienteId, string ddd, string numero, Telefone telefoneAtualizado);
+        Task<bool> PhoneAlreadUsed(string ddd, string numero);
+        Task<IEnumerable<string>> PhonesAlreadUsed(IEnumerable<string> dddNumeros);
+        Task<bool> PhoneBelong(Guid clienteId, string ddd, string numero);
     }
 }

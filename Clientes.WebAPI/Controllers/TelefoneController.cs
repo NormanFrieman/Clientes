@@ -15,10 +15,14 @@ namespace Clientes.WebAPI.Controllers
             _telefoneService = telefoneService;
         }
 
-        [HttpPut("{clienteId}/telefone/{numero}")]
-        public async Task<IActionResult> UpdateTelefone([FromRoute] Guid clienteId, [FromRoute] string numero, [FromBody] TelefoneDto telefoneAtualizado)
+        [HttpPut("{clienteId}/telefone/{ddd}/{numero}")]
+        public async Task<IActionResult> UpdateTelefone([FromRoute] Guid clienteId, [FromRoute] string ddd, [FromRoute] string numero, [FromBody] TelefoneDto telefoneAtualizado)
         {
-            return Ok(await _telefoneService.UpdateTelefone(clienteId, numero, telefoneAtualizado));
+            var result = await _telefoneService.UpdateTelefone(clienteId, ddd, numero, telefoneAtualizado);
+            if (!result.IsSuccess)
+                return StatusCode((int)result.Error.Code, result.Error.Messages);
+
+            return Ok();
         }
     }
 }

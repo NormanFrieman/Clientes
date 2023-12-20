@@ -5,6 +5,7 @@ using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
 using Clientes.Domain.Interfaces;
 using FluentValidation;
+using System.Net;
 
 namespace Clientes.Application.Services
 {
@@ -12,11 +13,13 @@ namespace Clientes.Application.Services
     {
         private readonly IValidator<ClienteDto> _validator;
         private readonly IClienteRepository _repository;
+        private readonly ITelefoneRepository _telefoneRepository;
 
-        public ClienteService(IValidator<ClienteDto> validator, IClienteRepository repository)
+        public ClienteService(IValidator<ClienteDto> validator, IClienteRepository repository, ITelefoneRepository telefoneRepository)
         {
             _validator = validator;
             _repository = repository;
+            _telefoneRepository = telefoneRepository;
         }
 
         public async Task<Result> CreateCliente(ClienteDto cliente)
@@ -28,8 +31,12 @@ namespace Clientes.Application.Services
             if (await _repository.EmailAlreadyUsed(cliente.Email))
                 return ClienteErrors.EmailAlreadyUsed;
 
+            var phonesAlreadyUsed = await _telefoneRepository.PhonesAlreadUsed(cliente.Telefones.Select(x => string.Concat(x.Ddd, x.Numero)));
+            if (phonesAlreadyUsed.Any())
+                return TelefoneErros.PhonesAlreadyUsed(phonesAlreadyUsed);
+
             var novoCliente = await _repository.CreateCliente(new Cliente(cliente.Nome, cliente.Email, cliente.Telefones
-                .Select(x => new Telefone(x.Numero, x.Tipo))
+                .Select(x => new Telefone(x.Numero, x.Ddd, x.Tipo))
                 .ToArray()));
 
             return Result.Success(new ClienteDto(novoCliente));
@@ -44,9 +51,9 @@ namespace Clientes.Application.Services
             return Result.Success();
         }
 
-        public async Task<IEnumerable<ClienteDto>> GetClientes(string? numero = null)
+        public async Task<IEnumerable<ClienteDto>> GetClientes(string? dddNumero = null)
         {
-            return (await _repository.GetClientesAsync(numero))
+            return (await _repository.GetClientesAsync(dddNumero))
                 .Select(x => new ClienteDto(x.Id, x.Nome, x.Email, x.Telefones
                     .Select(y => new TelefoneDto(y))
                     .ToArray()))

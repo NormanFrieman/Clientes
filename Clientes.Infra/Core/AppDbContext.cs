@@ -17,7 +17,7 @@ namespace Clientes.Infra.Core
                 .HasIndex(x => x.Email).IsUnique();
 
             modelBuilder.Entity<Telefone>()
-                .HasIndex(x => x.Numero).IsUnique();
+                .HasIndex(x => new { x.Ddd, x.Numero }).IsUnique();
         }
     }
 }

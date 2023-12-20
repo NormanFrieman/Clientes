@@ -1,9 +1,10 @@
-﻿using Clientes.Application.Dtos;
+﻿using Clientes.Application.Abstractions;
+using Clientes.Application.Dtos;
 
 namespace Clientes.Application.Interfaces
 {
     public interface ITelefoneService
     {
-        Task<TelefoneDto> UpdateTelefone(Guid clienteId, string numero, TelefoneDto telefoneAtualizado);
+        Task<Result> UpdateTelefone(Guid clienteId, string ddd, string numero, TelefoneDto telefoneAtualizado);
     }
 }
