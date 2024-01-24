@@ -6,6 +6,9 @@
         public string Nome { get; set; }
         public string Email { get; set; }
 
+        public DateTime DataCriacao { get; set; }
+        public DateTime? DataFim { get; set; }
+
         public IEnumerable<Telefone> Telefones { get; set; }
 
         public Cliente() : this(string.Empty, string.Empty, new List<Telefone>()) { }
