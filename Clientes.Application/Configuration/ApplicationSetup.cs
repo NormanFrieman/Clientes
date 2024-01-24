@@ -10,6 +10,7 @@ namespace Clientes.WebAPI.Configurations
         {
             services.AddScoped<IClienteService, ClienteService>();
             services.AddScoped<ITelefoneService, TelefoneService>();
+            services.AddScoped<ISessao, Sessao>();
 
             return services;
         }

@@ -1,4 +1,5 @@
-﻿using Clientes.Domain.Entities;
+﻿using Clientes.Application.Interfaces;
+using Clientes.Domain.Entities;
 using Clientes.Domain.Interfaces;
 using Clientes.Infra.Core;
 using Microsoft.EntityFrameworkCore;
@@ -8,14 +9,18 @@ namespace Clientes.Infra.Repositories
     public class ClienteRepository : IClienteRepository
     {
         private readonly AppDbContext _appDbContext;
+        private readonly ISessao _sessao;
 
-        public ClienteRepository(AppDbContext appDbContext)
+        public ClienteRepository(AppDbContext appDbContext, ISessao sessao)
         {
             _appDbContext = appDbContext;
+            _sessao = sessao;
         }
 
         public async Task<Cliente> CreateCliente(Cliente cliente)
         {
+            cliente.DataCriacao = _sessao.CurrentTime();
+
             _appDbContext.Cliente.Add(cliente);
             await _appDbContext.SaveChangesAsync();
 
@@ -26,7 +31,10 @@ namespace Clientes.Infra.Repositories
         {
             var cliente = await _appDbContext.Cliente.SingleOrDefaultAsync(x => x.Email.Equals(email))
                 ?? throw new ArgumentException("Cliente não encontrado", nameof(email));
-            _appDbContext.Cliente.Remove(cliente);
+
+            cliente.DataFim = _sessao.CurrentTime();
+
+            _appDbContext.Cliente.Update(cliente);
             await _appDbContext.SaveChangesAsync();
         }
 
@@ -57,6 +65,6 @@ namespace Clientes.Infra.Repositories
             await _appDbContext.Cliente.AnyAsync(x => x.Email.Equals(email));
 
         public async Task<bool> UserExists(Guid clienteId) =>
-            await _appDbContext.Cliente.AnyAsync(x => x.Id == clienteId);
+            await _appDbContext.Cliente.AnyAsync(x => x.Id == clienteId && x.DataFim == null);
     }
 }

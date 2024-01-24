@@ -5,7 +5,6 @@ using Clientes.Application.Interfaces;
 using Clientes.Domain.Entities;
 using Clientes.Domain.Interfaces;
 using FluentValidation;
-using System.Net;
 
 namespace Clientes.Application.Services
 {
@@ -35,9 +34,13 @@ namespace Clientes.Application.Services
             if (phonesAlreadyUsed.Any())
                 return TelefoneErros.PhonesAlreadyUsed(phonesAlreadyUsed);
 
-            var novoCliente = await _repository.CreateCliente(new Cliente(cliente.Nome, cliente.Email, cliente.Telefones
-                .Select(x => new Telefone(x.Numero, x.Ddd, x.Tipo))
-                .ToArray()));
+            var novoCliente = await _repository.CreateCliente(
+                new Cliente
+                (
+                    cliente.Nome,
+                    cliente.Email,
+                    cliente.Telefones.Select(x => new Telefone(x.Numero, x.Ddd, x.Tipo)).ToArray()
+                ));
 
             return Result.Success(new ClienteDto(novoCliente));
         }
